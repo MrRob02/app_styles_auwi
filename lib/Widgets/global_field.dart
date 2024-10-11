@@ -97,7 +97,7 @@ class _GlobalFieldState extends State<GlobalField> {
         suffixIcon: widget.isPassword
             ? textVisible
                 ? IconButton(
-                    icon: Icon(Icons.visibility_off),
+                    icon: const Icon(Icons.visibility_off),
                     onPressed: () {
                       setState(() {
                         textVisible = false;
@@ -105,7 +105,7 @@ class _GlobalFieldState extends State<GlobalField> {
                     },
                   )
                 : IconButton(
-                    icon: Icon(Icons.visibility),
+                    icon: const Icon(Icons.visibility),
                     onPressed: () {
                       setState(() {
                         textVisible = true;
@@ -115,7 +115,7 @@ class _GlobalFieldState extends State<GlobalField> {
             : widget.suffixButton != null
                 ? IconButton(
                     icon: Icon(widget.suffixButton!.icono),
-                    onPressed: widget.suffixButton!.suffixButton,
+                    onPressed: widget.suffixButton!.onTap,
                   )
                 : null);
 
@@ -147,11 +147,9 @@ class _GlobalFieldState extends State<GlobalField> {
 
 class BotonDerecho {
   final IconData icono;
-  final double iconSize;
-  final Function()? suffixButton;
+  final Function()? onTap;
   BotonDerecho({
-    this.iconSize = 20,
     required this.icono,
-    required this.suffixButton,
+    required this.onTap,
   });
 }

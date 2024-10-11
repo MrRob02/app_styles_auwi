@@ -6,15 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class MessageWidget extends StatelessWidget {
+class AlertMessageWidget extends StatelessWidget {
   final String title;
   final String message;
   final bool error;
-  const MessageWidget(
-      {super.key,
-      required this.title,
-      required this.message,
-      this.error = false});
+  const AlertMessageWidget(
+      {super.key, required this.title, required this.message})
+      : error = false;
+  const AlertMessageWidget.error(
+      {super.key, required this.title, required this.message})
+      : error = true;
 
   @override
   Widget build(BuildContext context) {

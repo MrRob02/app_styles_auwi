@@ -90,15 +90,17 @@ class _ShapeButtonState extends State<ShapeButton> {
                           const Gap(15)
                         ],
                       ),
-                    Text(widget.parametros.textoBoton,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            overflow: TextOverflow.ellipsis,
-                            color: color,
-                            fontSize: checkSize(),
-                            fontWeight: FontWeight.w500,
-                            wordSpacing: 2))
+                    Flexible(
+                      child: Text(widget.parametros.textoBoton,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              color: color,
+                              fontSize: checkSize(),
+                              fontWeight: FontWeight.w500,
+                              wordSpacing: 2)),
+                    )
                   ],
                 ),
               ),

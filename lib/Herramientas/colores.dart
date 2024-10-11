@@ -6,6 +6,7 @@ class Colores {
   static const colorTerciario = Color(0xFF7D5260);
 
   static const colorBackground = Color(0xFFF3F7FF);
+  static const colorBackgroundDark = Color(0xFFE4E7FF);
 
   static const colorHint = Color(0xFFB6B6B6);
 

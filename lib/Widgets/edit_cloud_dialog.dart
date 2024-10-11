@@ -1,6 +1,6 @@
 import '../Herramientas/colores.dart';
 import '../Herramientas/constantes.dart';
-import 'animated_dialog.dart';
+import 'hero_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
