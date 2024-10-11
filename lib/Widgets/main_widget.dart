@@ -53,10 +53,6 @@ class _MainWidgetState extends State<MainWidget> {
   bool showUpButton = false;
   @override
   Widget build(BuildContext context) {
-    if (widget.toUpButton && widget.floatingActionButton != null) {
-      throw Exception(
-          "No se puede tener un floatingActionButton y un toUpButton al mismo tiempo");
-    }
     final background =
         widget.whiteBackground ? Colors.white : Colores.colorBackground;
     return RefreshIndicator(
