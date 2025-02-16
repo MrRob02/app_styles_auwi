@@ -9,8 +9,9 @@ class BotonTexto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var color = traerColor();
     return CupertinoButton(
+        minSize: 0,
+        padding: const EdgeInsets.all(8),
         alignment: Alignment.centerLeft,
         onPressed: parametros.enabled ? parametros.onPressed : null,
         child: Row(
@@ -20,22 +21,21 @@ class BotonTexto extends StatelessWidget {
             if (parametros.icono != null) ...[
               Icon(
                 parametros.icono,
-                color: color,
+                color: getColor,
               ),
-              const Gap(15)
+              const Gap(10)
             ],
             Text(parametros.textoBoton,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: color,
+                  color: getColor,
                   fontWeight: FontWeight.w500,
-                  fontSize: 20,
                 )),
           ],
         ));
   }
 
-  Color traerColor() {
+  Color get getColor {
     if (parametros.rawColor != null) {
       return parametros.rawColor!;
     }
@@ -43,9 +43,6 @@ class BotonTexto extends StatelessWidget {
         !parametros.enabled ||
         parametros.onPressed == null) {
       return Colores.grisPrimario;
-    }
-    if (parametros.alerta) {
-      return Colores.colorDarkRed;
     }
     return Colores.colorPrimario;
   }
@@ -56,7 +53,6 @@ class ObjBotonesTexto {
   final Function()? onPressed;
   final bool enabled;
   final bool secondary;
-  final bool alerta;
   final IconData? icono;
   final MainAxisAlignment mainAxisAlignment;
   final Color? rawColor;
@@ -66,7 +62,6 @@ class ObjBotonesTexto {
       required this.textoBoton,
       this.mainAxisAlignment = MainAxisAlignment.center,
       this.onPressed,
-      this.alerta = false,
       this.enabled = true,
       this.icono,
       this.rawColor});

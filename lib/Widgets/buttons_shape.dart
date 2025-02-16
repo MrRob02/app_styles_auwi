@@ -73,7 +73,7 @@ class _ShapeButtonState extends State<ShapeButton> {
               onTap: widget.parametros.onPressed,
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 8),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -97,7 +97,7 @@ class _ShapeButtonState extends State<ShapeButton> {
                           style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               color: color,
-                              fontSize: checkSize(),
+                              fontSize: checkSize,
                               fontWeight: FontWeight.w500,
                               wordSpacing: 2)),
                     )
@@ -109,7 +109,7 @@ class _ShapeButtonState extends State<ShapeButton> {
     );
   }
 
-  double checkSize() {
+  double get checkSize {
     switch (widget.parametros.contentSize) {
       case ContentSize.small:
         return 14;

@@ -1,155 +1,213 @@
+import 'package:auwi_styles/auwi_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../Herramientas/colores.dart';
-import '../Herramientas/constantes.dart';
+
+enum EnumTipoField { text, number, email, password, otp }
 
 class GlobalField extends StatefulWidget {
-  final bool enabled;
+  ///El primero es si es password y el segundo es si esta visible la contra
   final bool isPassword;
-  final int? maxLength;
-  final bool showCounter;
+  final TextEditingController? controller;
   final String hint;
-  final TextInputAction? inputAction;
-  final TextEditingController? textController;
-  final ValueChanged<String>? onChanged;
-  final String? Function(String)? validator;
-  final Function()? onEditingCompleted;
-  final TextInputType textInputType;
-  final List<String>? autoFillType;
+  final String? downMessage;
   final TextAlign textAlign;
-  final Function(bool)? onFocusChange;
-  final FocusNode? focusNode;
-  final Function(String)? onFieldSubmitted;
+  final EnumTipoField _tipo;
+  final int? maxLength;
+  final String? Function(String?)? validator;
+  final Function(String)? onChanged;
+  final Function(String)? onFinish;
+  final TextInputAction? inputAction;
+  final TextInputFormatter? inputFormatter;
   final int? maxLines;
-  final List<TextInputFormatter>? inputFormatters;
-  final bool automaticUnfocus;
-  final BotonDerecho? suffixButton;
-
+  final FocusNode? focusNode;
+  final bool showCounter;
+  final Widget? suffixButton;
+  final Function(String)? onFieldSubmitted;
   const GlobalField(
       {super.key,
       required this.hint,
-      required this.textController,
-      this.autoFillType,
-      this.automaticUnfocus = true,
-      this.enabled = true,
-      this.focusNode,
-      this.inputAction,
-      this.inputFormatters,
-      this.isPassword = false,
-      this.maxLength,
-      this.maxLines,
+      this.controller,
+      this.downMessage,
+      this.validator,
+      this.textAlign = TextAlign.start,
       this.onChanged,
-      this.onEditingCompleted,
-      this.onFieldSubmitted,
-      this.onFocusChange,
+      this.maxLength,
+      this.inputAction,
+      this.maxLines,
+      this.focusNode,
       this.showCounter = false,
       this.suffixButton,
-      this.textAlign = TextAlign.start,
-      this.textInputType = TextInputType.text,
-      this.validator});
+      this.onFieldSubmitted})
+      : isPassword = false,
+        _tipo = EnumTipoField.text,
+        onFinish = null,
+        inputFormatter = null;
+
+  const GlobalField.email(
+      {super.key,
+      required this.hint,
+      this.controller,
+      this.downMessage,
+      this.validator,
+      this.onChanged,
+      this.inputAction,
+      this.focusNode,
+      this.suffixButton,
+      this.onFieldSubmitted})
+      : isPassword = false,
+        maxLines = 1,
+        showCounter = false,
+        inputFormatter = null,
+        textAlign = TextAlign.start,
+        _tipo = EnumTipoField.email,
+        maxLength = 100,
+        onFinish = null;
+
+  const GlobalField.password(
+      {super.key,
+      required this.hint,
+      this.controller,
+      this.downMessage,
+      this.validator,
+      this.maxLength,
+      this.onChanged,
+      this.maxLines = 1,
+      this.inputAction,
+      this.focusNode,
+      this.onFieldSubmitted})
+      : suffixButton = null,
+        isPassword = true,
+        showCounter = false,
+        textAlign = TextAlign.start,
+        _tipo = EnumTipoField.password,
+        inputFormatter = null,
+        onFinish = null;
+
+  GlobalField.number(
+      {super.key,
+      required this.hint,
+      this.controller,
+      this.downMessage,
+      this.validator,
+      this.onChanged,
+      this.inputAction,
+      this.maxLines,
+      this.focusNode,
+      this.suffixButton,
+      this.onFieldSubmitted})
+      : isPassword = false,
+        textAlign = TextAlign.start,
+        _tipo = EnumTipoField.number,
+        maxLength = 7,
+        inputFormatter = Styles.onlyDecimals,
+        showCounter = false,
+        onFinish = null;
+  GlobalField.otp(
+      {super.key,
+      this.controller,
+      required this.onFinish,
+      this.onChanged,
+      this.focusNode,
+      this.onFieldSubmitted})
+      : suffixButton = null,
+        showCounter = true,
+        isPassword = false,
+        downMessage = null,
+        validator = null,
+        maxLines = 1,
+        inputFormatter = FilteringTextInputFormatter.digitsOnly,
+        hint = List.generate(6, (_) => '0').join(' '),
+        textAlign = TextAlign.center,
+        _tipo = EnumTipoField.otp,
+        maxLength = 6,
+        inputAction = TextInputAction.done;
 
   @override
   State<GlobalField> createState() => _GlobalFieldState();
 }
 
 class _GlobalFieldState extends State<GlobalField> {
-  var textVisible = false;
-  late final FocusNode focusNode;
+  late TextEditingController controller;
+  bool obscureText = true;
   @override
   void initState() {
+    controller = widget.controller ?? TextEditingController();
     super.initState();
-    if (widget.isPassword && widget.suffixButton != null) {
-      throw Exception(
-          'No se puede tener un campo de contraseña con un botón derecho');
-    }
-    focusNode = widget.focusNode ?? FocusNode();
   }
 
   @override
   Widget build(BuildContext context) {
-    var borde = BorderRadius.circular(Styles.bordeFields);
-
-    final defaultBorder = OutlineInputBorder(
-      borderSide: const BorderSide(color: Colors.transparent),
-      borderRadius: borde,
-    );
-    final focusedBoderStyle = OutlineInputBorder(
-      borderSide: const BorderSide(color: Colores.colorPrimario, width: 2),
-      borderRadius: borde,
-    );
-
-    final errorBoderStyle = OutlineInputBorder(
-      borderSide: const BorderSide(color: Colores.colorDarkRed),
-      borderRadius: borde,
-    );
-
-    final inputDecoration = InputDecoration(
-        counterText: widget.showCounter ? null : '',
-        hintText: widget.hint,
-        errorBorder: errorBoderStyle,
-        focusedErrorBorder: errorBoderStyle,
-        disabledBorder: defaultBorder,
-        focusedBorder: focusedBoderStyle,
-        enabledBorder: defaultBorder,
-        errorStyle: const TextStyle(fontSize: 15),
-        filled: true,
-        fillColor: Colors.white,
-        suffixIcon: widget.isPassword
-            ? textVisible
-                ? IconButton(
-                    icon: const Icon(Icons.visibility_off),
-                    onPressed: () {
-                      setState(() {
-                        textVisible = false;
-                      });
-                    },
-                  )
-                : IconButton(
-                    icon: const Icon(Icons.visibility),
-                    onPressed: () {
-                      setState(() {
-                        textVisible = true;
-                      });
-                    },
-                  )
-            : widget.suffixButton != null
-                ? IconButton(
-                    icon: Icon(widget.suffixButton!.icono),
-                    onPressed: widget.suffixButton!.onTap,
-                  )
-                : null);
-
     return TextFormField(
-        focusNode: focusNode,
-        validator: (p0) => widget.validator?.call(p0 ?? ''),
-        inputFormatters: widget.inputFormatters,
-        onEditingComplete: widget.onEditingCompleted,
-        maxLengthEnforcement: MaxLengthEnforcement.enforced,
-        maxLength: widget.maxLength,
-        maxLines: widget.isPassword ? 1 : widget.maxLines,
+        controller: widget.controller,
+        obscureText: widget.isPassword ? obscureText : false,
+        textCapitalization: TextCapitalization.none,
+        autocorrect: false,
+        enableSuggestions: false,
+        validator: widget.validator,
         textAlign: widget.textAlign,
-        autofillHints: widget.autoFillType,
-        enabled: widget.enabled,
-        onTapOutside:
-            widget.automaticUnfocus ? (_) => focusNode.unfocus() : null,
-        controller: widget.textController,
-        decoration: inputDecoration,
-        textInputAction: widget.inputAction,
-        onFieldSubmitted: widget.onFieldSubmitted,
-        obscureText: widget.isPassword && !textVisible,
-        enableSuggestions: !widget.isPassword,
-        autocorrect: !widget.isPassword,
+        maxLength: widget.maxLength,
+        buildCounter: (context,
+                {required currentLength,
+                required isFocused,
+                required maxLength}) =>
+            null,
+        focusNode: widget.focusNode,
+        autofillHints: autoFillHints,
         onChanged: widget.onChanged,
-        keyboardType: widget.textInputType,
-        style: const TextStyle(height: 1));
+        style: isOtp ? const TextStyle(fontSize: 20, letterSpacing: 25) : null,
+        onTapOutside: (event) => FocusScope.of(context).unfocus(),
+        keyboardType: inputType,
+        decoration: InputDecoration(
+          suffixIcon: suffix,
+          fillColor: Colores.colorBackgroundDark,
+          filled: true,
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Colores.colorPrimarioDark)),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide.none),
+          hintText: widget.hint,
+          hintStyle:
+              isOtp ? const TextStyle(fontSize: 20, letterSpacing: 15) : null,
+        ));
   }
-}
 
-class BotonDerecho {
-  final IconData icono;
-  final Function()? onTap;
-  BotonDerecho({
-    required this.icono,
-    required this.onTap,
-  });
+  bool get isOtp => widget._tipo == EnumTipoField.otp;
+  Widget? get suffix => widget.isPassword
+      ? IconButton(
+          icon: Icon(obscureText ? Icons.visibility : Icons.visibility_off),
+          onPressed: () {
+            setState(() {
+              obscureText = !obscureText;
+            });
+          })
+      : widget.suffixButton;
+  TextInputType get inputType {
+    switch (widget._tipo) {
+      case EnumTipoField.text:
+        return TextInputType.text;
+      case EnumTipoField.email:
+        return TextInputType.emailAddress;
+      case EnumTipoField.password:
+        return TextInputType.visiblePassword;
+      case EnumTipoField.otp:
+      case EnumTipoField.number:
+        return TextInputType.number;
+    }
+  }
+
+  get autoFillHints {
+    switch (widget._tipo) {
+      case EnumTipoField.text:
+      case EnumTipoField.number:
+        return null;
+      case EnumTipoField.email:
+        return [AutofillHints.email];
+      case EnumTipoField.password:
+        return [AutofillHints.password];
+      case EnumTipoField.otp:
+        return [AutofillHints.oneTimeCode];
+    }
+  }
 }

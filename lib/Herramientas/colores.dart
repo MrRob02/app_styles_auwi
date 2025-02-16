@@ -14,7 +14,6 @@ class Colores {
   static const grisSecundario = Color(0xFF8C8C8C);
   static const textos = Color(0xFF424242);
 
-  static const colorDarkRed = Color(0xFF6C0000);
-  static const colorOrange = Color(0xFF925700);
+  static const errorColor = Color(0xFF6C0000);
   static const darkGreen = Color(0xFF1C6C00);
 }

@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../Herramientas/colores.dart';
-import '../Herramientas/vibrator_helper.dart';
+import '../Herramientas/feedback_helper.dart';
 
 class BotonEscaneo extends StatefulWidget {
   final RxBool isTorchEnabled;
@@ -114,7 +114,7 @@ class _BotonEscaneoState extends State<BotonEscaneo>
                 child: Listener(
                   onPointerDown: (details) {
                     _animationController.forward();
-                    VibratorHelper.vibrate();
+                    FeedbackHelper.vibrate();
                     timer = Timer(Duration(milliseconds: tiempoAnimacion),
                         () async {
                       final value = await _isEmulator();
