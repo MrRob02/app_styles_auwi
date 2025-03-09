@@ -192,11 +192,6 @@ class _MainWidgetState extends State<MainWidget> {
               }
             }(),
           ),
-          AnimatedOpacity(
-            opacity: widget.isLoading ? 0.5 : 1,
-            duration: const Duration(milliseconds: 300),
-            child: widget.child ?? const SizedBox.shrink(),
-          ),
           if (widget.isLoading && widget.loadingShimmer == null)
             const Center(
               child: CircularProgressIndicator.adaptive(),
