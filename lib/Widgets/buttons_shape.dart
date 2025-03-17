@@ -73,7 +73,7 @@ class _ShapeButtonState extends State<ShapeButton> {
               onTap: widget.parametros.onPressed,
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
